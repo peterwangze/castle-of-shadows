@@ -1,0 +1,75 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvq3a9y4v6c6c"]
+
+[ext_resource type="Script" path="res://scripts/Game.gd" id="1_game"]
+[ext_resource type="PackedScene" uid="uid://bv9q8r0s3e4e5" path="res://scenes/TestLevel.tscn" id="2_testlevel"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_game")
+
+[node name="CurrentLevel" parent="." instance=ExtResource("2_testlevel")]
+
+[node name="GameUI" type="CanvasLayer" parent="."]
+layer = 100
+follow_viewport_enabled = true
+
+[node name="HUD" type="Control" parent="GameUI"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = 20.0
+margin_right = -20.0
+margin_bottom = -20.0
+
+[node name="HealthBar" type="TextureProgressBar" parent="GameUI/HUD"]
+position = Vector2(20, 20)
+size = Vector2(200, 20)
+value = 100.0
+max_value = 100.0
+texture_progress = SubResource("TextureProgress_1")
+tint_progress = Color(0.8, 0.2, 0.2, 1)
+
+[node name="EnergyBar" type="TextureProgressBar" parent="GameUI/HUD"]
+position = Vector2(20, 50)
+size = Vector2(200, 15)
+value = 100.0
+max_value = 100.0
+texture_progress = SubResource("TextureProgress_2")
+tint_progress = Color(0.2, 0.5, 0.8, 1)
+
+[node name="CoinCounter" type="Label" parent="GameUI/HUD"]
+position = Vector2(20, 80)
+size = Vector2(100, 30)
+text = "金币: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.1, 0.1, 0.1, 0.8)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="DebugPanel" type="Panel" parent="GameUI/HUD"]
+position = Vector2(600, 20)
+size = Vector2(200, 100)
+visible = false
+theme = SubResource("Theme_1")
+
+[node name="DebugLabel" type="Label" parent="GameUI/HUD/DebugPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+text = "调试信息"
+vertical_alignment = 1
+
+[sub_resource type="Theme" id="Theme_1"]
+
+[sub_resource type="TextureProgressBarStyle" id="TextureProgress_1"]
+background = SubResource("StyleBoxFlat_1")
+
+[sub_resource type="TextureProgressBarStyle" id="TextureProgress_2"]
+background = SubResource("StyleBoxFlat_1")

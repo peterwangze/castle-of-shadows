@@ -1,0 +1,52 @@
+# Godot-specific ignores
+*.import
+.godot/
+export.cfg
+export_presets.cfg
+
+# Claude Code configuration
+.claude/
+
+# Build artifacts
+build/
+bin/
+*.exe
+*.pck
+*.zip
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor/IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs and debug files
+logs/
+*.log
+debug/
+*.pid
+
+# Temp files
+tmp/
+temp/
+
+# Backup files
+*.bak
+*.backup
+
+# Asset source files (keep only if you want to ignore source files)
+*.psd
+*.ai
+*.blend
+*.mb
+*.ma

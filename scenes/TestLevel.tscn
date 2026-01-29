@@ -1,0 +1,150 @@
+[gd_scene load_steps=5 format=3 uid="uid://bw8q9r1t4f5f6"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_player"]
+[ext_resource type="TileSet" uid="uid://cu7p8s2u5g6g7" path="res://assets/tilesets/basic_tileset.tres" id="2_tileset"]
+[ext_resource type="PackedScene" uid="uid://du9q9t3v6h7h8" path="res://scenes/enemies/Skeleton.tscn" id="3_skeleton"]
+[ext_resource type="PackedScene" uid="uid://ev0r0u4w7i8i9" path="res://scenes/items/Coin.tscn" id="4_coin"]
+
+[node name="TestLevel" type="Node2D"]
+
+[node name="TileMap" type="TileMapLayer" parent="."]
+position = Vector2(0, 0)
+tile_set = ExtResource("2_tileset")
+cell_quadrant_size = 16
+cell_size = Vector2(16, 16)
+
+# 基础地面（简化表示）
+# 第1行：墙壁
+# 第2-10行：平台
+[node name="TileMapData" type="Node" parent="TileMap"]
+script = ExtResource("TileMapData_1")
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(100, 200)
+
+[node name="CameraBounds" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="EnemySpawn1" type="Marker2D" parent="."]
+position = Vector2(300, 180)
+
+[node name="EnemySpawn2" type="Marker2D" parent="."]
+position = Vector2(500, 180)
+
+[node name="ItemSpawn1" type="Marker2D" parent="."]
+position = Vector2(400, 150)
+
+[node name="Checkpoint1" type="Area2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Checkpoint1"]
+position = Vector2(0, 0)
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Checkpoint1"]
+shape = SubResource("CircleShape2D_1")
+
+[node name="Lighting" type="CanvasModulate" parent="."]
+color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+
+[node name="Background" type="Sprite2D" parent="ParallaxBackground"]
+position = Vector2(320, 180)
+texture = SubResource("BackgroundTexture_1")
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_mirroring = Vector2(640, 0)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(640, 360)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 32.0
+
+[sub_resource type="GDScript" id="TileMapData_1"]
+script/source = """
+extends Node
+
+func _ready():
+	generate_test_level()
+
+func generate_test_level():
+	var tilemap = get_parent()
+
+	# 生成地面（第10行，y=10）
+	for x in range(-5, 45):  # 宽度50格
+		tilemap.set_cell(0, Vector2i(x, 10), 0, Vector2i(0, 0))
+
+	# 生成平台
+	for x in range(5, 15):
+		tilemap.set_cell(0, Vector2i(x, 7), 0, Vector2i(0, 0))
+
+	for x in range(20, 30):
+		tilemap.set_cell(0, Vector2i(x, 5), 0, Vector2i(0, 0))
+
+	# 生成墙壁
+	for y in range(0, 10):
+		tilemap.set_cell(0, Vector2i(-5, y), 0, Vector2i(1, 0))
+		tilemap.set_cell(0, Vector2i(44, y), 0, Vector2i(1, 0))
+
+	print("测试关卡生成完成")
+"""
+
+[sub_resource type="Texture2D" id="BackgroundTexture_1"]
+load_path = "res://assets/art/background/castle_bg.png"
+
+[node name="SpawnManager" type="Node" parent="."]
+script = ExtResource("SpawnManager_1")
+
+[sub_resource type="GDScript" id="SpawnManager_1"]
+script/source = """
+extends Node
+
+func _ready():
+	spawn_initial_enemies()
+	spawn_initial_items()
+
+func spawn_initial_enemies():
+	# 生成骷髅敌人
+	var skeleton_scene = load("res://scenes/enemies/Skeleton.tscn")
+	if skeleton_scene:
+		for i in range(2):
+			var enemy = skeleton_scene.instantiate()
+			enemy.position = get_node("../EnemySpawn" + str(i+1)).position
+			add_child(enemy)
+			print("生成敌人: 骷髅 " + str(i+1))
+
+func spawn_initial_items():
+	# 生成金币
+	var coin_scene = load("res://scenes/items/Coin.tscn")
+	if coin_scene:
+		var coin = coin_scene.instantiate()
+		coin.position = get_node("../ItemSpawn1").position
+		add_child(coin)
+		print("生成物品: 金币")
+
+func _on_enemy_died(enemy):
+	print("敌人死亡: " + enemy.name)
+	# 可以在这里添加重生逻辑
+
+func _on_checkpoint_reached(checkpoint):
+	print("检查点到达: " + checkpoint.name)
+	# 保存游戏状态
+"""
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+stream = SubResource("TestMusic_1")
+autoplay = true
+volume_db = -10.0
+
+[sub_resource type="AudioStreamWAV" id="TestMusic_1"]
+# 占位符音乐，实际开发中替换为实际音乐文件
+
+[node name="AmbientSound" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AmbientSound_1")
+autoplay = true
+volume_db = -20.0
+
+[sub_resource type="AudioStreamWAV" id="AmbientSound_1"]
+# 环境音效，如风声、城堡氛围
