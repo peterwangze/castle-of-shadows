@@ -104,6 +104,26 @@ debug_load={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777278,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
  ]
 }
+debug_toggle={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777264,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+]
+}
+debug_invincible={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777265,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+]
+}
+debug_one_hit_kill={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777266,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+]
+}
+debug_infinite_energy={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777267,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+]
+}
 
 [autoload]
 

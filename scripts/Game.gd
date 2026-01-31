@@ -26,6 +26,14 @@ enum GameState {
 }
 var game_state := GameState.MENU
 
+## 调试系统
+var debug_mode := false
+var debug_ui_node: CanvasLayer = null
+var debug_label: Label = null
+var invincible_mode := false
+var one_hit_kill_mode := false
+var infinite_energy_mode := false
+
 ## 资源引用
 var levels := {
 	"castle_exterior": "res://levels/CastleExterior.tscn",
@@ -393,6 +401,9 @@ func _process(delta: float):
 		# 检查胜利条件
 		check_victory_condition()
 
+	# 更新调试信息
+	update_debug_info()
+
 func _input(event: InputEvent):
 	"""输入处理"""
 	if event.is_action_pressed("pause"):
@@ -407,6 +418,24 @@ func _input(event: InputEvent):
 
 	if event.is_action_pressed("debug_load"):
 		load_game()
+
+	if event.is_action_pressed("debug_regenerate"):
+		regenerate_level()
+
+	if event.is_action_pressed("debug_clear"):
+		clear_enemies()
+
+	if event.is_action_pressed("debug_toggle"):
+		toggle_debug_mode()
+
+	if event.is_action_pressed("debug_invincible"):
+		toggle_invincible_mode()
+
+	if event.is_action_pressed("debug_one_hit_kill"):
+		toggle_one_hit_kill_mode()
+
+	if event.is_action_pressed("debug_infinite_energy"):
+		toggle_infinite_energy_mode()
 
 func _on_player_died():
 	"""玩家死亡处理"""
@@ -464,12 +493,77 @@ func initialize_audio():
 
 func initialize_ui():
 	"""初始化UI系统"""
-	# 加载UI场景
-	var ui_scene = load("res://ui/GameUI.tscn")
-	if ui_scene:
-		var ui_instance = ui_scene.instantiate()
-		ui_instance.name = "GameUI"
-		add_child(ui_instance)
+	# 获取GameUI节点（已在Main.tscn中）
+	debug_ui_node = get_node_or_null("GameUI")
+	if debug_ui_node:
+		# 获取调试标签
+		debug_label = debug_ui_node.get_node_or_null("HUD/DebugPanel/DebugLabel")
+		if debug_label:
+			print("调试UI初始化完成")
+		else:
+			print("警告: 未找到DebugLabel节点")
+	else:
+		print("警告: 未找到GameUI节点")
+
+func toggle_debug_mode():
+	"""切换调试模式"""
+	debug_mode = not debug_mode
+
+	if debug_ui_node and debug_label:
+		var debug_panel = debug_ui_node.get_node_or_null("HUD/DebugPanel")
+		if debug_panel:
+			debug_panel.visible = debug_mode
+
+	print("调试模式: " + ("开启" if debug_mode else "关闭"))
+
+func toggle_invincible_mode():
+	"""切换无敌模式"""
+	invincible_mode = not invincible_mode
+	print("无敌模式: " + ("开启" if invincible_mode else "关闭"))
+
+func toggle_one_hit_kill_mode():
+	"""切换一击必杀模式"""
+	one_hit_kill_mode = not one_hit_kill_mode
+	print("一击必杀模式: " + ("开启" if one_hit_kill_mode else "关闭"))
+
+func toggle_infinite_energy_mode():
+	"""切换无限能量模式"""
+	infinite_energy_mode = not infinite_energy_mode
+	print("无限能量模式: " + ("开启" if infinite_energy_mode else "关闭"))
+
+func update_debug_info():
+	"""更新调试信息"""
+	if not debug_mode or not debug_label:
+		return
+
+	var debug_text = ""
+	debug_text += "=== 调试信息 ===\n"
+	debug_text += "游戏时间: " + str(game_time) + "s\n"
+	debug_text += "游戏状态: " + GameState.keys()[game_state] + "\n"
+	debug_text += "当前关卡: " + current_level + "\n"
+	debug_text += "敌人数量: " + str(enemies.size()) + "\n"
+	debug_text += "检查点: " + current_checkpoint + "\n"
+	debug_text += "无敌模式: " + ("开启" if invincible_mode else "关闭") + "\n"
+	debug_text += "一击必杀: " + ("开启" if one_hit_kill_mode else "关闭") + "\n"
+	debug_text += "无限能量: " + ("开启" if infinite_energy_mode else "关闭") + "\n"
+
+	if player and is_instance_valid(player):
+		debug_text += "玩家位置: (" + str(player.global_position.x) + ", " + str(player.global_position.y) + ")\n"
+		debug_text += "玩家生命: " + str(player.health) + "/" + str(player.max_health if player.has_method("get_max_health") else 100) + "\n"
+		if player.has_method("get_shadow_energy"):
+			debug_text += "暗影能量: " + str(player.shadow_energy) + "/" + str(player.shadow_energy_max if player.has_method("get_shadow_energy_max") else 100) + "\n"
+
+	debug_text += "\n调试命令:\n"
+	debug_text += "F1: 切换调试面板\n"
+	debug_text += "F2: 无敌模式\n"
+	debug_text += "F3: 一击必杀模式\n"
+	debug_text += "F4: 无限能量模式\n"
+	debug_text += "F5: 重新开始游戏\n"
+	debug_text += "F6: 重新生成关卡\n"
+	debug_text += "F7: 清除所有敌人\n"
+	debug_text += "F8/F9: 保存/加载游戏\n"
+
+	debug_label.text = debug_text
 
 func play_sound(sound_name: String):
 	"""播放音效"""
@@ -568,6 +662,46 @@ func check_victory_condition():
 	"""检查胜利条件"""
 	# 这里可以检查Boss是否被击败等条件
 	pass
+
+func regenerate_level():
+	"""重新生成当前关卡（调试功能）"""
+	print("调试: 重新生成关卡")
+
+	if current_level != "":
+		# 保存当前玩家位置和状态
+		var player_pos = Vector2.ZERO
+		var player_health = 100
+		var player_energy = 100
+
+		if player and is_instance_valid(player):
+			player_pos = player.global_position
+			player_health = player.health
+			player_energy = player.shadow_energy
+
+		# 重新加载关卡
+		change_level(current_level)
+
+		# 恢复玩家状态
+		if player and is_instance_valid(player):
+			player.global_position = player_pos
+			player.health = player_health
+			player.shadow_energy = player_energy
+
+		print("关卡已重新生成")
+	else:
+		print("没有当前关卡，无法重新生成")
+
+func clear_enemies():
+	"""清除所有敌人（调试功能）"""
+	print("调试: 清除所有敌人")
+
+	var enemy_count = enemies.size()
+	for enemy in enemies.duplicate():  # 使用副本遍历，因为队列释放会修改原数组
+		if is_instance_valid(enemy):
+			enemy.queue_free()
+
+	enemies.clear()
+	print("已清除 " + str(enemy_count) + " 个敌人")
 
 func get_next_level(current_level_name: String) -> String:
 	"""获取下一关卡"""

@@ -121,7 +121,13 @@ func perform_attack():
 	"""执行攻击"""
 	attack_cooldown = ATTACK_COOLDOWN_TIME
 
-	print("攻击! 伤害: " + str(attack_damage))
+	# 调试：一击必杀模式
+	var damage = attack_damage
+	if Game and Game.one_hit_kill_mode:
+		damage = 9999
+		print("一击必杀模式：伤害设置为9999")
+
+	print("攻击! 伤害: " + str(damage))
 
 	# 启用攻击检测
 	if attack_area:
@@ -143,7 +149,7 @@ func perform_attack():
 			if body.is_in_group("enemy"):
 				# 对敌人造成伤害
 				if body.has_method("take_damage"):
-					if body.take_damage(attack_damage, global_position):
+					if body.take_damage(damage, global_position):
 						hit_enemies.append(body)
 
 		# 攻击反馈
@@ -221,6 +227,11 @@ func update_animation():
 func take_damage(damage: int, attacker_position: Vector2):
 	"""受到伤害"""
 	if not is_alive:
+		return false
+
+	# 调试：无敌模式
+	if Game and Game.invincible_mode:
+		print("无敌模式：忽略伤害")
 		return false
 
 	health -= damage

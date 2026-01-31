@@ -179,6 +179,11 @@ func perform_attack():
 	# 计算伤害
 	var damage = attack_damage * weapon_damage_multiplier[current_weapon]
 
+	# 调试：一击必杀模式
+	if Game and Game.one_hit_kill_mode:
+		damage = 9999
+		print("一击必杀模式：伤害设置为9999")
+
 	# 动画和音效
 	animation_player.play("attack_" + str(current_weapon).to_lower())
 	play_sound("attack")
@@ -259,10 +264,13 @@ func use_cross():
 
 func activate_shadow_form():
 	"""激活暗影形态"""
-	if shadow_energy < SHADOW_FORM_COST:
+	# 调试：无限能量模式检查
+	if not (Game and Game.infinite_energy_mode) and shadow_energy < SHADOW_FORM_COST:
 		return
 
-	shadow_energy -= SHADOW_FORM_COST
+	# 调试：无限能量模式
+	if not (Game and Game.infinite_energy_mode):
+		shadow_energy -= SHADOW_FORM_COST
 	is_in_shadow_form = true
 	shadow_form_timer = SHADOW_FORM_DURATION
 
@@ -295,10 +303,13 @@ func deactivate_shadow_form():
 
 func start_dash():
 	"""开始冲刺"""
-	if shadow_energy < 10:
+	# 调试：无限能量模式检查
+	if not (Game and Game.infinite_energy_mode) and shadow_energy < 10:
 		return
 
-	shadow_energy -= 10
+	# 调试：无限能量模式
+	if not (Game and Game.infinite_energy_mode):
+		shadow_energy -= 10
 	is_dashing = true
 	dash_cooldown = DASH_COOLDOWN_TIME
 
@@ -319,6 +330,11 @@ func start_dash():
 func take_damage(damage: int, attacker_position: Vector2):
 	"""受到伤害"""
 	if not is_alive or is_in_shadow_form:
+		return false
+
+	# 调试：无敌模式
+	if Game and Game.invincible_mode:
+		print("无敌模式：忽略伤害")
 		return false
 
 	# 计算实际伤害（考虑防御）
