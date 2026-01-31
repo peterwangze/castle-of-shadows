@@ -21,6 +21,8 @@ var attack_cooldown := 0.0
 ## 节点引用
 @onready var sprite := $Sprite2D
 @onready var camera := $Camera2D
+var health_label: Label
+var attack_area: Area2D
 
 ## 输入变量
 var input_direction := Vector2.ZERO
@@ -44,6 +46,15 @@ func _ready():
 	print("  J/鼠标左键: 攻击")
 	print("  Shift: 冲刺")
 
+	# 初始化UI
+	setup_ui()
+
+	# 设置相机
+	setup_camera()
+
+	# 设置攻击检测区域
+	setup_attack_hitbox()
+
 func _physics_process(delta: float):
 	"""每帧物理更新"""
 	if not is_alive:
@@ -54,6 +65,7 @@ func _physics_process(delta: float):
 	process_movement(delta)
 	process_attack()
 	update_animation()
+	update_ui()
 
 	# 应用移动
 	move_and_slide()
@@ -110,6 +122,44 @@ func perform_attack():
 	attack_cooldown = ATTACK_COOLDOWN_TIME
 
 	print("攻击! 伤害: " + str(attack_damage))
+
+	# 启用攻击检测
+	if attack_area:
+		# 更新攻击区域位置（根据玩家朝向）
+		var attack_shape = attack_area.get_child(0) as CollisionShape2D
+		if attack_shape:
+			# 根据玩家朝向设置位置
+			if sprite.flip_h:  # 面向左
+				attack_shape.position = Vector2(-20, 0)
+			else:  # 面向右
+				attack_shape.position = Vector2(20, 0)
+
+		attack_area.monitoring = true
+		attack_area.monitorable = true
+
+		# 检测攻击命中
+		var hit_enemies = []
+		for body in attack_area.get_overlapping_bodies():
+			if body.is_in_group("enemy"):
+				# 对敌人造成伤害
+				if body.has_method("take_damage"):
+					if body.take_damage(attack_damage, global_position):
+						hit_enemies.append(body)
+
+		# 攻击反馈
+		if hit_enemies.size() > 0:
+			print("击中 " + str(hit_enemies.size()) + " 个敌人!")
+			# 轻微击退
+			velocity.x = -100 if sprite.flip_h else 100
+		else:
+			print("未击中敌人")
+
+		# 短暂后禁用检测
+		await get_tree().create_timer(0.1).timeout
+		attack_area.monitoring = false
+		attack_area.monitorable = false
+	else:
+		print("警告: 攻击区域未初始化")
 
 	# 简单攻击效果
 	sprite.modulate = Color(1.5, 1.5, 1.5, 1.0)
@@ -228,3 +278,64 @@ func _on_collectible_area_entered(area: Area2D):
 	if area.name.begins_with("Coin"):
 		heal(5)
 		area.queue_free()
+
+func setup_ui():
+	"""设置UI元素"""
+	# 创建生命值标签
+	var label = Label.new()
+	label.name = "HealthLabel"
+	label.text = "生命值: " + str(health) + "/" + str(max_health)
+	label.position = Vector2(20, 20)
+	label.add_theme_font_size_override("font_size", 24)
+	label.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	add_child(label)
+	health_label = label
+
+func setup_camera():
+	"""设置相机跟随"""
+	if camera:
+		# 设置相机平滑跟随
+		camera.smoothing_enabled = true
+		camera.smoothing_speed = 5.0
+		camera.drag_margin_h_enabled = true
+		camera.drag_margin_v_enabled = true
+		camera.drag_margin_left = 0.2
+		camera.drag_margin_right = 0.2
+		camera.drag_margin_top = 0.2
+		camera.drag_margin_bottom = 0.2
+
+		# 设置相机边界（可根据关卡调整）
+		camera.limit_left = -1000
+		camera.limit_right = 1000
+		camera.limit_top = -1000
+		camera.limit_bottom = 1000
+
+func update_ui():
+	"""更新UI显示"""
+	if health_label:
+		health_label.text = "生命值: " + str(health) + "/" + str(max_health)
+
+func setup_attack_hitbox():
+	"""设置攻击检测区域"""
+	# 创建攻击区域
+	var area = Area2D.new()
+	area.name = "AttackHitbox"
+
+	# 创建碰撞形状
+	var shape = CollisionShape2D.new()
+	var rect = RectangleShape2D.new()
+	rect.size = Vector2(40, 20)  # 攻击范围
+	shape.shape = rect
+	# 初始位置（右侧）
+	shape.position = Vector2(20, 0)
+
+	area.add_child(shape)
+	add_child(area)
+	attack_area = area
+
+	# 默认禁用碰撞
+	attack_area.monitoring = false
+	attack_area.monitorable = false
+
+	print("攻击检测区域已创建")
+

@@ -79,6 +79,31 @@ pause={
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777217,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
  ]
 }
+debug_regenerate={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777274,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+ ]
+}
+debug_clear={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777275,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+ ]
+}
+debug_restart={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777276,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+ ]
+}
+debug_save={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777277,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+ ]
+}
+debug_load={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"command_or_control_pressed":false,"pressed":false,"keycode":16777278,"physical_keycode":0,"unicode":0,"key_label":0,"echo":false,"script":null)
+ ]
+}
 
 [autoload]
 

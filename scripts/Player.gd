@@ -49,6 +49,7 @@ var subweapon_ammo := {
 @onready var attack_hitbox := $AttackHitbox
 @onready var shadow_particles := $ShadowParticles
 @onready var camera := $Camera2D
+var health_label: Label
 
 ## 输入变量
 var input_direction := Vector2.ZERO
@@ -71,6 +72,7 @@ func _ready():
 	health = max_health
 	shadow_energy = shadow_energy_max
 	setup_camera()
+	setup_ui()
 	Game.player = self
 	print("玩家初始化完成 - 艾登准备就绪")
 
@@ -163,6 +165,16 @@ func process_abilities(delta: float):
 func perform_attack():
 	"""执行攻击"""
 	attack_cooldown = ATTACK_COOLDOWN_TIME
+
+	# 根据玩家朝向调整攻击区域位置
+	if attack_hitbox:
+		var attack_shape = attack_hitbox.get_child(0) as CollisionShape2D
+		if attack_shape:
+			# 根据玩家朝向设置攻击区域位置
+			if sprite.flip_h:  # 面向左
+				attack_shape.position = Vector2(-20, 0)
+			else:  # 面向右
+				attack_shape.position = Vector2(20, 0)
 
 	# 计算伤害
 	var damage = attack_damage * weapon_damage_multiplier[current_weapon]
@@ -400,12 +412,23 @@ func update_hud():
 func setup_camera():
 	"""设置相机"""
 	if camera:
+		# 相机平滑跟随
+		camera.smoothing_enabled = true
+		camera.smoothing_speed = 5.0
+
+		# 相机边界
 		camera.limit_left = -1000
 		camera.limit_right = 1000
 		camera.limit_top = -1000
 		camera.limit_bottom = 1000
+
+		# 拖拽边缘设置
 		camera.drag_margin_h_enabled = true
 		camera.drag_margin_v_enabled = true
+		camera.drag_margin_left = 0.2
+		camera.drag_margin_right = 0.2
+		camera.drag_margin_top = 0.2
+		camera.drag_margin_bottom = 0.2
 
 func set_invincible(duration: float):
 	"""设置短暂无敌"""
