@@ -129,5 +129,6 @@ debug_infinite_energy={
 
 EventBus="res://scripts/EventBus.gd"
 AudioManager="res://scripts/AudioManager.gd"
+SaveManager="res://scripts/SaveManager.gd"
 Game="res://scripts/Game.gd"
 PlayerData="res://scripts/PlayerData.gd"

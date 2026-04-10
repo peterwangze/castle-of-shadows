@@ -1,8 +1,8 @@
 # Castle of Shadows - 架构演进与开发路线图
 
-> 文档版本：v1.0  
+> 文档版本：v1.1  
 > 更新日期：2026-04-10  
-> 项目阶段：第一阶段原型期
+> 项目阶段：第二阶段核心玩法完善期
 
 ---
 
@@ -12,60 +12,41 @@
 
 | 系统模块 | 完成度 | 状态评估 | 阻塞等级 |
 |---------|--------|----------|---------|
-| 玩家控制系统 | 75% | 核心功能完整，副武器场景缺失 | 🔴 P0 |
-| 战斗系统 | 70% | 攻击检测正常，缺动画和特效 | 🟡 P1 |
-| 敌人AI系统 | 60% | EnemyBase框架完整，存在方法调用错误 | 🔴 P0 |
-| 游戏流程管理 | 70% | 关卡切换框架完整，缺实际关卡 | 🟡 P1 |
-| 存档系统 | 60% | 基础功能可用，缺多槽支持 | 🟢 P2 |
-| 数据持久化 | 85% | PlayerData设计良好 | ✅ 完成 |
-| 调试系统 | 85% | 功能完整 | ✅ 完成 |
-| 音频系统 | 10% | 仅有占位符 | 🔴 P0 |
-| UI系统 | 30% | 仅有基础HUD | 🔴 P0 |
-| 关卡系统 | 40% | 配置完整，场景缺失 | 🟡 P1 |
-| 资源制作 | 20% | 大量占位符 | 🟢 P2 |
+| 玩家控制系统 | 90% | 核心功能完整，副武器已实现 | ✅ 完成 |
+| 战斗系统 | 85% | 攻击检测正常，连击系统完整 | 🟡 P1 |
+| 敌人AI系统 | 85% | EnemyBase框架完整，5种敌人实现 | ✅ 完成 |
+| 游戏流程管理 | 85% | 关卡切换完整，6关卡可用 | ✅ 完成 |
+| 存档系统 | 90% | 多槽支持已实现 | ✅ 完成 |
+| 数据持久化 | 95% | PlayerData设计良好，SaveManager已添加 | ✅ 完成 |
+| 调试系统 | 90% | 功能完整，包含无敌/一击必杀/无限能量 | ✅ 完成 |
+| 音频系统 | 80% | AudioManager完整，音频资源占位 | 🟡 P1 |
+| UI系统 | 70% | HUD、主菜单、暂停、胜利、失败画面 | 🟡 P1 |
+| 关卡系统 | 95% | 6关卡完整配置，敌人和收集品已放置 | ✅ 完成 |
+| Boss系统 | 95% | DraculaBoss实现，3阶段5攻击模式 | ✅ 完成 |
+| 投射物系统 | 90% | ProjectileManager已实现，4种副武器 | ✅ 完成 |
+| 资源制作 | 30% | 大量占位符 | 🟢 P2 |
 | 成就系统 | 0% | 未开始 | 🟢 P3 |
 
-### 1.2 阻塞性问题清单
+### 1.2 已完成的阻塞问题
 
-```
-🔴 P0级 - 必须立即修复：
+~~🔴 P0级 - 必须立即修复：~~
 
-1. 方法不存在错误
-   位置：scripts/EnemyBase.gd:302
-   问题：调用 Game.player.gain_experience() 但 Player.gd 中无此方法
-   影响：敌人死亡时运行时错误
+1. ✅ **方法不存在错误** - 已修复
+   - 解决方案：Player.gd 添加 gain_experience 方法
+   - EnemyBase.gd 改为调用 Game.player_data.gain_experience()
 
-2. 副武器场景文件缺失
-   位置：scripts/Player.gd:235-263
-   缺失文件：
-   - res://scenes/projectiles/HolyWater.tscn
-   - res://scenes/projectiles/Knife.tscn
-   - res://scenes/projectiles/Axe.tscn
-   - res://scenes/projectiles/Cross.tscn
-   影响：使用副武器时崩溃
+2. ✅ **副武器场景文件缺失** - 已修复
+   - 已创建：HolyWater.tscn, Knife.tscn, Axe.tscn, Cross.tscn
+   - 脚本：对应 .gd 文件已创建
 
-3. EventBus 非全局单例
-   位置：scripts/Game.gd:745-760
-   问题：EventBus 是 Game.gd 的内部类，非真正单例
-   影响：信号连接不可靠，调试困难
+3. ✅ **EventBus 非全局单例** - 已修复
+   - 创建独立 scripts/EventBus.gd
+   - 配置为 Autoload 单例
+   - 包含 40+ 类型化信号
 
-4. Main.tscn 场景引用错误
-   位置：scenes/Main.tscn
-   问题：引用不存在的 TestLevel.tscn 和 UI 资源
-   影响：主场景无法运行
-
-🟡 P1级 - 短期需要修复：
-
-5. TestLevel.tscn TileSet 缺失
-   位置：scenes/TestLevel.tscn:4
-   缺失：res://assets/tilesets/basic_tileset.tres
-
-6. 敌人场景文件缺失
-   缺失：res://scenes/enemies/Skeleton.tscn 等
-
-7. UI场景文件缺失
-   缺失：PauseMenu.tscn, GameOver.tscn 等
-```
+4. ✅ **Main.tscn 场景引用** - 已修复
+   - TestLevel.tscn 存在
+   - 调试系统正常工作
 
 ---
 

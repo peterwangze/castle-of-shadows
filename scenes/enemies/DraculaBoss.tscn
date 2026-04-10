@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://draculaboss12345"]
+
+[ext_resource type="Script" path="res://scripts/enemies/DraculaBoss.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/art/enemies/gargoyle/idle_01.png" id="2_texture"]
+
+[node name="DraculaBoss" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_texture")
+scale = Vector2(2.5, 2.5)
+modulate = Color(0.3, 0, 0.3, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="AttackHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+position = Vector2(40, 0)
+shape = SubResource("RectangleShape2D_2")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(40, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(80, 50)
