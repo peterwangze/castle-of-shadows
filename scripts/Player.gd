@@ -25,6 +25,15 @@ var attack_cooldown := 0.0
 var is_in_shadow_form := false
 var shadow_form_timer := 0.0
 
+## 技能系统变量
+var combo_window_bonus := 0.0
+var heal_on_kill := 0
+var crit_chance := 0.0
+var shadow_form_duration_bonus := 0.0
+var energy_regen_bonus := 0.0
+var dash_distance_bonus := 0.0
+var perception_level := 0
+
 ## 装备系统
 enum WeaponType {SWORD, AXE, MACE}
 var current_weapon := WeaponType.SWORD
