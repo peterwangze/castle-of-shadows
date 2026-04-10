@@ -128,5 +128,6 @@ debug_infinite_energy={
 [autoload]
 
 EventBus="res://scripts/EventBus.gd"
+AudioManager="res://scripts/AudioManager.gd"
 Game="res://scripts/Game.gd"
 PlayerData="res://scripts/PlayerData.gd"
