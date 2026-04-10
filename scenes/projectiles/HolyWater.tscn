@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://holywater12345"]
+
+[ext_resource type="Script" path="res://scripts/projectiles/HolyWater.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://holywatertex" path="res://assets/art/effects/holy_water.png" id="2_texture"]
+
+[node name="HolyWater" type="Area2D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_script")
+damage = 15
+speed = 250.0
+lifetime = 2.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_texture")
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 8.0

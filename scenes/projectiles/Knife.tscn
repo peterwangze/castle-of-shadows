@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://knife12345"]
+
+[ext_resource type="Script" path="res://scripts/projectiles/Knife.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://knifetex" path="res://assets/art/effects/knife.png" id="2_texture"]
+
+[node name="Knife" type="Area2D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_script")
+damage = 12
+speed = 500.0
+lifetime = 2.0
+penetration_count = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_texture")
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(16, 4)

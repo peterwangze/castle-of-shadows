@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://axe12345"]
+
+[ext_resource type="Script" path="res://scripts/projectiles/Axe.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://axetex" path="res://assets/art/effects/axe.png" id="2_texture"]
+
+[node name="Axe" type="Area2D"]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_script")
+damage = 25
+speed = 250.0
+lifetime = 5.0
+gravity = 400.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_texture")
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_1")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1"]
+radius = 10.0

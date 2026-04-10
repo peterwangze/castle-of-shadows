@@ -68,10 +68,10 @@ func initialize_systems():
 	player_data = PlayerData.new()
 
 	# 连接信号
-	EventBus.connect("player_died", _on_player_died)
-	EventBus.connect("enemy_died", _on_enemy_died)
-	EventBus.connect("checkpoint_reached", _on_checkpoint_reached)
-	EventBus.connect("level_completed", _on_level_completed)
+	EventBus.player_died.connect(_on_player_died)
+	EventBus.enemy_died.connect(_on_enemy_died)
+	EventBus.checkpoint_reached.connect(_on_checkpoint_reached)
+	EventBus.level_completed.connect(_on_level_completed)
 
 	# 初始化音频
 	initialize_audio()
@@ -568,36 +568,36 @@ func update_debug_info():
 func play_sound(sound_name: String):
 	"""播放音效"""
 	# 通过音频管理器播放
-	EventBus.emit_signal("play_sound", sound_name)
+	EventBus.play_sound.emit(sound_name, 0.0)
 
 func play_level_music(level_name: String):
 	"""播放关卡音乐"""
 	var music_name = "bgm_" + level_name
-	EventBus.emit_signal("play_music", music_name)
+	EventBus.play_music.emit(music_name, 1.0)
 
 func show_pause_menu():
 	"""显示暂停菜单"""
-	EventBus.emit_signal("show_pause_menu")
+	EventBus.show_pause_menu.emit()
 
 func hide_pause_menu():
 	"""隐藏暂停菜单"""
-	EventBus.emit_signal("hide_pause_menu")
+	EventBus.hide_pause_menu.emit()
 
 func show_game_over_screen():
 	"""显示游戏结束画面"""
-	EventBus.emit_signal("show_game_over")
+	EventBus.show_game_over.emit({})
 
 func show_victory_screen():
 	"""显示胜利画面"""
-	EventBus.emit_signal("show_victory")
+	EventBus.show_victory.emit({})
 
 func show_save_indicator():
 	"""显示保存指示器"""
-	EventBus.emit_signal("show_save_indicator")
+	EventBus.show_save_indicator.emit()
 
 func show_tutorial(tutorial_id: String):
 	"""显示教程提示"""
-	EventBus.emit_signal("show_tutorial", tutorial_id)
+	EventBus.show_tutorial.emit(tutorial_id)
 
 func save_game_settings():
 	"""保存游戏设置"""
@@ -741,20 +741,3 @@ class CheckpointData:
 		position = Vector2(pos_data.x, pos_data.y)
 		player_health = data.get("player_health", 100)
 		player_energy = data.get("player_energy", 100)
-
-# 信号总线（简化版）
-class EventBus:
-	static var signals := {}
-
-	static func connect(signal_name: String, callable: Callable):
-		if not signal_name in signals:
-			signals[signal_name] = []
-		signals[signal_name].append(callable)
-
-	static func emit_signal(signal_name: String, arg = null):
-		if signal_name in signals:
-			for callable in signals[signal_name]:
-				if arg != null:
-					callable.call(arg)
-				else:
-					callable.call()

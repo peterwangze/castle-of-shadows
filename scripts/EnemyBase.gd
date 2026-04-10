@@ -298,8 +298,10 @@ func die():
 	state_timer = 1.0  # 死亡后消失时间
 
 	# 给予奖励
-	Game.player.add_coins(coin_reward)
-	Game.player.gain_experience(experience_reward)
+	if Game.player:
+		Game.player.add_coins(coin_reward)
+	if Game.player_data:
+		Game.player_data.gain_experience(experience_reward)
 
 	# 掉落物品
 	try_drop_item()

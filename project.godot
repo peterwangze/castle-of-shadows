@@ -127,5 +127,6 @@ debug_infinite_energy={
 
 [autoload]
 
+EventBus="res://scripts/EventBus.gd"
 Game="res://scripts/Game.gd"
 PlayerData="res://scripts/PlayerData.gd"

@@ -1,0 +1,25 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cu7p8s2u5g6g7"]
+
+[ext_resource type="Texture2D" path="res://assets/art/tilesets/basic/floor.png" id="1_floor"]
+
+[resource]
+tile_size = Vector2i(16, 16)
+
+[sources]
+0 = {
+	"atlas": ExtResource("1_floor"),
+	"columns": 1,
+	"rows": 1,
+	"texture_region": Rect2i(0, 0, 16, 16)
+}
+
+[terrain_sets]
+0 = {
+	"name": "Ground",
+	"mode": 0
+}
+
+[tile_data]
+Vector2i(0, 0) = {
+	"physics": [Vector2i(0, 0), 1]
+}

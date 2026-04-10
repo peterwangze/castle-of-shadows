@@ -387,6 +387,37 @@ func add_coins(amount: int):
 	coins += amount
 	play_sound("coin")
 
+## ========== 经验值与升级系统 ==========
+func gain_experience(amount: int):
+	"""获得经验值（委托给PlayerData处理）"""
+	if Game.player_data:
+		var old_level = Game.player_data.level
+		Game.player_data.gain_experience(amount)
+
+		# 检查是否升级了
+		if Game.player_data.level > old_level:
+			on_level_up(Game.player_data.level)
+
+		# 更新HUD
+		update_hud()
+
+func on_level_up(new_level: int):
+	"""升级时调用（视觉表现）"""
+	# 升级奖励
+	max_health += 10
+	health = max_health  # 升级时回满血
+	attack_damage += 2
+	shadow_energy_max += 5
+	shadow_energy = shadow_energy_max
+
+	# 升级特效
+	play_sound("level_up")
+	sprite.modulate = Color(1.5, 1.5, 0.5, 1.0)
+	await get_tree().create_timer(0.3).timeout
+	sprite.modulate = Color.WHITE
+
+	print("升级！当前等级: %d" % new_level)
+
 func update_timers(delta: float):
 	"""更新所有冷却计时器"""
 	if dash_cooldown > 0:
