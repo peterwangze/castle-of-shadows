@@ -1,0 +1,107 @@
+[gd_scene load_steps=2 format=3 uid="uid://settingsmenu12345"]
+
+[ext_resource type="Script" path="res://scripts/ui/SettingsMenu.gd" id="1_script"]
+
+[node name="SettingsMenu" type="CanvasLayer"]
+layer = 110
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="MasterContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="MasterLabel" type="Label" parent="Panel/VBoxContainer/MasterContainer"]
+layout_mode = 2
+text = "Master:"
+
+[node name="MasterSlider" type="HSlider" parent="Panel/VBoxContainer/MasterContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MusicContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="MusicLabel" type="Label" parent="Panel/VBoxContainer/MusicContainer"]
+layout_mode = 2
+text = "Music:"
+
+[node name="MusicSlider" type="HSlider" parent="Panel/VBoxContainer/MusicContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="SFXContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="SFXLabel" type="Label" parent="Panel/VBoxContainer/SFXContainer"]
+layout_mode = 2
+text = "SFX:"
+
+[node name="SFXSlider" type="HSlider" parent="Panel/VBoxContainer/SFXContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="FullscreenCheck" type="CheckBox" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="VSyncCheck" type="CheckBox" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "V-Sync"
+
+[node name="BackButton" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "BACK"
