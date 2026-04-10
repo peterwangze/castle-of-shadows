@@ -1,0 +1,65 @@
+[gd_scene load_steps=2 format=3 uid="uid://skilltree12345"]
+
+[ext_resource type="Script" path="res://scripts/ui/SkillTree.gd" id="1_script"]
+
+[node name="SkillTree" type="CanvasLayer"]
+layer = 110
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.7)
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+
+[node name="TitleLabel" type="Label" parent="Panel"]
+offset_left = 250.0
+offset_top = 10.0
+text = "SKILL TREE"
+
+[node name="PointsLabel" type="Label" parent="Panel"]
+offset_left = 20.0
+offset_top = 10.0
+text = "技能点: 0"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 50.0
+offset_right = -20.0
+offset_bottom = -50.0
+
+[node name="CombatTree" type="VBoxContainer" parent="Panel/HBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/CombatTree"]
+text = "战斗技能"
+
+[node name="ShadowTree" type="VBoxContainer" parent="Panel/HBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/ShadowTree"]
+text = "暗影技能"
+
+[node name="UtilityTree" type="VBoxContainer" parent="Panel/HBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/UtilityTree"]
+text = "辅助技能"
+
+[node name="CloseButton" type="Button" parent="Panel"]
+offset_left = 250.0
+offset_top = 360.0
+text = "CLOSE"
