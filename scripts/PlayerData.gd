@@ -35,6 +35,7 @@ extends Resource
 	"life_steal": false,
 	"energy_shield": false
 }
+@export var unlocked_skills: Array[String] = []  # 技能树解锁的技能列表
 
 ## 装备系统
 @export var equipped_weapon := "sword"
@@ -431,6 +432,7 @@ func serialize() -> Dictionary:
 		"luck": luck,
 		"skill_points": skill_points,
 		"skills": skills.duplicate(true),
+		"unlocked_skills": unlocked_skills.duplicate(),
 		"equipped_weapon": equipped_weapon,
 		"equipped_subweapon": equipped_subweapon,
 		"equipped_armor": equipped_armor,
@@ -477,6 +479,7 @@ func deserialize(data: Dictionary):
 	luck = data.get("luck", 10)
 	skill_points = data.get("skill_points", 0)
 	skills = data.get("skills", {}).duplicate(true)
+	unlocked_skills = data.get("unlocked_skills", [])
 	equipped_weapon = data.get("equipped_weapon", "sword")
 	equipped_subweapon = data.get("equipped_subweapon", "none")
 	equipped_armor = data.get("equipped_armor", "leather")
