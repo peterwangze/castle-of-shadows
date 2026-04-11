@@ -35,10 +35,10 @@ var patrol_direction := 1  # 巡逻方向：1右，-1左
 
 ## 节点引用
 @onready var sprite := $Sprite2D
-@onready var animation_player := $AnimationPlayer
-@onready var detection_area := $DetectionArea
-@onready var attack_area := $AttackArea
-@onready var health_bar := $HealthBar
+var animation_player: AnimationPlayer
+var detection_area: Area2D
+var attack_area: Area2D
+var health_bar: ProgressBar
 
 ## 掉落物品配置
 var possible_drops := [
@@ -51,11 +51,16 @@ var possible_drops := [
 func _ready():
 	"""敌人初始化"""
 	health = max_health
+
+	# 安全获取可选节点
+	animation_player = get_node_or_null("AnimationPlayer")
+	detection_area = get_node_or_null("DetectionArea")
+	attack_area = get_node_or_null("AttackArea")
+	health_bar = get_node_or_null("HealthBar")
+
 	initialize_enemy()
 	Game.register_enemy(self)
-	print(str(enemy_type) + " 敌人生成")
-
-func _physics_process(delta: float):
+	print(str(enemy_type) + " 敌人生成")(delta: float):
 	"""物理更新"""
 	if not is_alive:
 		return
@@ -236,7 +241,7 @@ func update_animation():
 		anim_name = "die" + anim_suffix
 
 	# 播放动画
-	if animation_player.has_animation(anim_name):
+	if animation_player and animation_player.has_animation(anim_name):
 		animation_player.play(anim_name)
 
 func perform_attack():
@@ -244,12 +249,16 @@ func perform_attack():
 	attack_cooldown = get_attack_cooldown()
 
 	# 播放攻击动画和音效
-	animation_player.play("attack_" + str(enemy_type).to_lower())
+	if animation_player:
+		var anim_name = "attack_" + str(enemy_type).to_lower()
+		if animation_player and animation_player.has_animation(anim_name):
+			animation_player.play(anim_name)
 	play_sound("enemy_attack")
 
 	# 检测攻击命中
 	var hit_player = false
-	for area in attack_area.get_overlapping_areas():
+	if attack_area:
+		for area in attack_area.get_overlapping_areas():
 		if area.is_in_group("player"):
 			var player = area.get_parent()
 			if player.take_damage(attack_damage, global_position):
@@ -313,7 +322,10 @@ func die():
 	Game.unregister_enemy(self)
 
 	# 死亡动画
-	animation_player.play("die_" + str(enemy_type).to_lower())
+	if animation_player:
+		var anim_name = "die_" + str(enemy_type).to_lower()
+		if animation_player.has_animation(anim_name):
+			animation_player.play(anim_name)
 
 func try_drop_item():
 	"""尝试掉落物品"""

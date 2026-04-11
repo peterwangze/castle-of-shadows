@@ -23,6 +23,7 @@ var current_attack := Attack.MELEE
 ## 特殊能力
 var bat_scene: PackedScene
 var blood_wave_scene: PackedScene
+var attack_hitbox: Area2D
 
 ## 状态
 var is_attacking := false
@@ -32,6 +33,7 @@ var teleport_timer := 0.0
 
 func _ready():
 	boss_name = BOSS_NAME
+	attack_hitbox = get_node_or_null("AttackHitbox")
 	super._ready()
 
 	enemy_type = EnemyType.GARGOYLE  # 复用类型
